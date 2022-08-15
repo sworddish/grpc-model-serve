@@ -1,11 +1,12 @@
 syntax = "proto3";
 
-option java_package = "com.modzy.model.grpc";
-option java_multiple_files = true;
+// option java_package = "com.modzy.model.grpc";
+// option java_multiple_files = true;
 
 service ModzyModel {
   rpc Status(StatusRequest) returns (StatusResponse);
-  rpc Run(RunRequest) returns (RunResponse);
+  rpc RunBytes(RunBytesRequest) returns (RunResponse);
+  rpc RunStr(RunStrRequest) returns (RunResponse);
   rpc Shutdown(ShutdownRequest) returns (ShutdownResponse);
 }
 
@@ -90,12 +91,22 @@ message StatusResponse {
   ModelFeatures features         = 10;
 }
 
-message InputItem {
+message InputBytesItem {
   map<string, bytes> input      = 1;
 }
 
-message RunRequest {
-  repeated InputItem inputs     = 1;
+message RunBytesRequest {
+  repeated InputBytesItem inputs     = 1;
+  bool detect_drift             = 2;
+  bool explain                  = 3;
+}
+
+message InputStrItem {
+  map<string, string> input      = 1;
+}
+
+message RunStrRequest {
+  repeated InputStrItem inputs     = 1;
   bool detect_drift             = 2;
   bool explain                  = 3;
 }

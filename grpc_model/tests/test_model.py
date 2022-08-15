@@ -5,7 +5,7 @@ from typing import Dict, Tuple
 import pytest
 
 from grpc_model import TEST_CASES as _TEST_CASES
-from grpc_model.src.auto_generated.model2_template.model_pb2 import InputItem, RunRequest, StatusRequest
+from grpc_model.src.auto_generated.model_template.model_pb2 import InputBytesItem, RunStrRequest, RunBytesRequest, StatusRequest
 from grpc_model.src.utils import extract_inputs_outputs_from_yaml
 from model_lib.src.model import ExampleModel
 
@@ -67,7 +67,7 @@ class TestModzyModelWrapper:
 
 @pytest.fixture(scope="module")
 def grpc_add_to_server():
-    from grpc_model.src.auto_generated.model2_template.model_pb2_grpc import add_ModzyModelServicer_to_server
+    from grpc_model.src.auto_generated.model_template.model_pb2_grpc import add_ModzyModelServicer_to_server
 
     return add_ModzyModelServicer_to_server
 
@@ -82,7 +82,7 @@ def grpc_servicer():
 
 @pytest.fixture(scope="module")
 def grpc_stub(grpc_channel):
-    from grpc_model.src.auto_generated.model2_template.model_pb2_grpc import ModzyModelStub
+    from grpc_model.src.auto_generated.model_template.model_pb2_grpc import ModzyModelStub
 
     modzy_model_stub = ModzyModelStub(grpc_channel)
     return modzy_model_stub  # This is a fake channel passed in by pytest-grpc
@@ -99,9 +99,9 @@ def test_example_model_grpc_integration(grpc_stub, batch_size, detect_drift, exp
     """
     model_input, expected_output = test_inputs_and_outputs
 
-    run_request = RunRequest()
+    run_request = RunBytesRequest()
     for _ in range(batch_size):
-        input_item = InputItem(input=model_input)
+        input_item = InputBytesItem(input=model_input)
         run_request.inputs.append(input_item)
     run_request.detect_drift = False
     run_request.explain = False

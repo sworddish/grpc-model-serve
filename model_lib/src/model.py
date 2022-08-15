@@ -1,6 +1,7 @@
 import json
 from typing import Dict, List
 
+import logging
 import os
 import sys
 import ast
@@ -12,11 +13,18 @@ from torchvision import models, transforms
 from skimage.segmentation import mark_boundaries
 from lime import lime_image
 from PIL import Image
+import base64
+
+from time import time as t
 
 # define data directories
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 LABELS = os.path.join(ROOT_DIR, 'imagenet_classes.txt')
 WEIGHTS_DIR = os.path.join(ROOT_DIR, 'weights/resnet101_weights.pth')
+
+logging.basicConfig(level=logging.INFO)
+LOGGER = logging.getLogger(__name__)
+
 
 """
 The required output structure for a successful inference run for a models is the following JSON:
@@ -295,7 +303,7 @@ class GRPCBasicImageClassification:
         return rle_mask        
     
     
-    def handle_single_input(self, model_input: Dict[str, bytes], detect_drift: bool, explain: bool) -> Dict[str, bytes]:
+    def handle_single_input(self, model_input, detect_drift: bool, explain: bool, type) -> Dict[str, bytes]:
         """
         This corresponds to the Run remote procedure call for single inputs.
         """
@@ -304,12 +312,12 @@ class GRPCBasicImageClassification:
         # You are responsible for processing these files in a manner that is specific to your model, and producing
         # inference, drift, and explainability results where appropriate.
         
-        result = self.handle_input_batch([model_input], detect_drift, explain)[0]
+        result = self.handle_input_batch([model_input], detect_drift, explain, type)[0]
 
         return result
   
     
-    def handle_input_batch(self, model_inputs: List[Dict[str, bytes]], detect_drift, explain) -> List[Dict[str, bytes]]:
+    def handle_input_batch(self, model_inputs, detect_drift, explain, type) -> List[Dict[str, bytes]]:
         """
         This is an optional method that will be attempted to be called when more than one inputs to the model
         are ready to be processed. This enables a user to provide a more efficient means of handling inputs in batch
@@ -324,6 +332,7 @@ class GRPCBasicImageClassification:
 
         This corresponds to the Run remote procedure call for batch inputs.
 
+        model_inputs was List[Dict[str, bytes]] previously, here we just want try bytes or base64 encoded string
         {
             "error": "your error message here"
         }
@@ -336,6 +345,13 @@ class GRPCBasicImageClassification:
         for i, model_input in enumerate(model_inputs):
             # Try to get a image frame, but otherwise go for the data key
             image = model_input['image']
+            if type == 'str':
+                start_run_call = t()
+                image = base64.b64decode(image)
+                run_route_time = t() - start_run_call
+                LOGGER.info(
+                    f"decode image base64 str in {run_route_time}. "
+                )
             load_res, orig_shape = self.preprocess_img_bytes(image)
             if isinstance(load_res,dict):
                 indexed_errors[i] = load_res

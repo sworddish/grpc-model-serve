@@ -8,21 +8,21 @@ from typing import Dict
 
 import grpc
 
-from grpc_model.src.auto_generated.model2_template.model_pb2 import InputItem, RunRequest, RunResponse, StatusRequest
-from grpc_model.src.auto_generated.model2_template.model_pb2_grpc import ModzyModelStub
+from grpc_model.src.auto_generated.model_template.model_pb2 import InputStrItem, InputBytesItem, RunStrRequest, RunBytesRequest, RunResponse, StatusRequest
+from grpc_model.src.auto_generated.model_template.model_pb2_grpc import ModzyModelStub
 from grpc_model.src.model_server import get_server_port
 
 HOST = "localhost"
 BATCH_SIZE = 8
-TEST_IMG_PATH = "./dog.jpg"
+TEST_IMG_PATH = "./t.png"
 
 logging.basicConfig(level=logging.INFO)
 LOGGER = logging.getLogger(__name__)
 
 
 def run(model_input):
-    def create_input(input_text: Dict[str, bytes]) -> InputItem:
-        input_item = InputItem()
+    def create_input_bytes(input_text: Dict[str, bytes]) -> InputBytesItem:
+        input_item = InputBytesItem()
         for input_filename, input_contents in input_text.items():
             input_item.input[input_filename] = input_contents
         return input_item
@@ -48,15 +48,15 @@ def run(model_input):
             return
 
         LOGGER.info(f"Sending single input.")
-        run_request = RunRequest(inputs=[create_input(model_input)], explain=True)
-        single_response = grpc_client_stub.Run(run_request)
+        run_request = RunBytesRequest(inputs=[create_input_bytes(model_input)], detect_drift=False, explain=False)
+        single_response = grpc_client_stub.RunBytes(run_request)
         unpack_and_report_outputs(single_response)
 
         LOGGER.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~")
 
         LOGGER.info(f"Sending batch of input.")
-        run_request_batch = RunRequest(inputs=[create_input(model_input) for _ in range(BATCH_SIZE)], explain=True)
-        batch_response = grpc_client_stub.Run(run_request_batch)
+        run_request_batch = RunBytesRequest(inputs=[create_input_bytes(model_input) for _ in range(BATCH_SIZE)], explain=False)
+        batch_response = grpc_client_stub.RunBytes(run_request_batch)
         unpack_and_report_outputs(batch_response)
 
 

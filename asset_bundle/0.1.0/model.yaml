@@ -1,5 +1,5 @@
 # The version of the model specification.
-specification: '0.4'
+specification: "0.4"
 # Model input type. Can be either "file" or "grpc.
 type: grpc
 source:
@@ -61,22 +61,21 @@ releaseNotes:
 
 # Tags and filters help users find this model.
 tags:
--
+  -
 filters:
-- type:
-  label:
-- type:
-  label:
+  - type:
+    label:
+  - type:
+    label:
 
 # This section contains the data science metrics for your model
 # Each metric contains a human-readable label along with a
 # decimal value between 0 and 1.
 metrics:
-- label:
-  type:
-  value:
-  description:
-
+  - label:
+    type:
+    value:
+    description:
 
 # Please indicate the names and kinds of input(s) that your model
 # expects. The names and types you specify here will be used to
@@ -89,8 +88,8 @@ inputs:
     # on media types, see:
     # https://www.iana.org/assignments/media-types/media-types.xhtml
     acceptedMediaTypes:
-    - image/jpeg
-    - image/png
+      - image/jpeg
+      - image/png
     # The maximum size that this file is expected to be.
     maxSize: 5M
     # A human readable description of what this file is expected to
@@ -112,7 +111,6 @@ outputs:
     # be. This value supports content in Markdown format for including
     # rich text, links, images, etc.
     description: Top prediction and corresponding confidence score
-
 
 # The resources section indicates what resources are required by your model
 # in order to run efficiently. Keep in mind that there may be many instances
@@ -148,11 +146,11 @@ internal:
   available: true
 
 features:
-    adversarialDefense: false
-    maxBatchSize: 8
-    retrainable: false
-    # The following features should be modified from away from null to a supported format specification if you want
-    # your model to have platform support for results, drift, or explanations.
-    resultsFormat: null
-    driftFormat: null
-    explanationFormat: null
+  adversarialDefense: false
+  maxBatchSize: 8
+  retrainable: false
+  # The following features should be modified from away from null to a supported format specification if you want
+  # your model to have platform support for results, drift, or explanations.
+  resultsFormat: null
+  driftFormat: null
+  explanationFormat: null

@@ -8,7 +8,7 @@ from typing import Dict, List
 import grpc
 
 from grpc_model import GRPC_SERVER_PORT as _GRPC_SERVER_PORT
-from grpc_model.src.auto_generated.model2_template.model_pb2 import (
+from grpc_model.src.auto_generated.model_template.model_pb2 import (
     ModelDescription,
     ModelFeatures,
     ModelInfo,
@@ -21,7 +21,7 @@ from grpc_model.src.auto_generated.model2_template.model_pb2 import (
     ShutdownResponse,
     StatusResponse,
 )
-from grpc_model.src.auto_generated.model2_template.model_pb2_grpc import (
+from grpc_model.src.auto_generated.model_template.model_pb2_grpc import (
     ModzyModelServicer,
     add_ModzyModelServicer_to_server,
 )
@@ -166,7 +166,8 @@ class ModzyModel(ModzyModelServicer):
         LOGGER.info(f"Completed call to Status Route in {t() - start_status_call}")
         return status_response
 
-    def Run(self, request, context):
+    def RunBytes(self, request, context):
+        LOGGER.info("Got the request...")
         start_run_call = t()
         response = RunResponse()
         outputs = []
@@ -185,7 +186,7 @@ class ModzyModel(ModzyModelServicer):
             if current_batch_size > 1:
                 try:
                     raw_outputs: List[Dict[str, bytes]] = self.model.handle_input_batch(
-                        [input_item.input for input_item in request.inputs], request.detect_drift, request.explain
+                        [input_item.input for input_item in request.inputs], request.detect_drift, request.explain, 'bytes'
                     )
                     if current_batch_size != len(raw_outputs):
                         LOGGER.critical(
@@ -215,8 +216,87 @@ class ModzyModel(ModzyModelServicer):
             if not batch_process:
                 for i, input_item in enumerate(request.inputs):
                     try:
+                        LOGGER.info(f"handle single input")
                         raw_output: Dict[str, bytes] = self.model.handle_single_input(
-                            input_item.input, request.detect_drift, request.explain
+                            input_item.input, request.detect_drift, request.explain, 'bytes'
+                        )
+                        # TODO: It would probably be useful to have an example of explanation/drift metadata here
+                        output_item = create_output_item(f"Processed item {i + 1} as single input.", raw_output)
+                    except Exception as e:
+                        # TODO: we could potentially extract even more information from: stack_trace = e.__traceback__
+                        log_stack_trace()
+                        output_item = create_output_item(
+                            f"Failed to process model input. Exception Encountered: {e}"
+                        )
+                    outputs.append(output_item)
+
+        response = RunResponse(
+            status_code=200,
+            status="OK",
+            message="Inference executed",
+        )
+        response.outputs.extend(outputs)
+        num_inputs = len(request.inputs)
+        run_route_time = t() - start_run_call
+        LOGGER.info(
+            f"Completed call to Run Route with {num_inputs} inputs in {run_route_time}. "
+            f"Inputs per second: {num_inputs / run_route_time}"
+        )
+        return response
+
+    def RunStr(self, request, context):
+        LOGGER.info("Got the request...")
+        start_run_call = t()
+        response = RunResponse()
+        outputs = []
+
+        if self.model is None:
+            # If the model has not been initialized, every input in the batch produces an error
+            for _ in range(request.inputs):
+                output_item = create_output_item(
+                    "Failed to process model input. Model has not been initialized for inference."
+                )
+                response.outputs.append(output_item)
+            return response
+        else:
+            batch_process = False
+            current_batch_size = len(request.inputs)
+            if current_batch_size > 1:
+                try:
+                    raw_outputs: List[Dict[str, bytes]] = self.model.handle_input_batch(
+                        [input_item.input for input_item in request.inputs], request.detect_drift, request.explain, 'str'
+                    )
+                    if current_batch_size != len(raw_outputs):
+                        LOGGER.critical(
+                            f"The number of outputs from `handle_discrete_input_batch` ({len(raw_outputs)}) does not"
+                            f" match the number of inputs ({current_batch_size}). Attempting to fall back."
+                        )
+                        batch_process = False
+                        raise InputOutputMismatchException
+
+                    for i, raw_output in enumerate(raw_outputs):
+                        # TODO: It would probably be useful to have an example of explanation/drift metadata here
+                        output_item = create_output_item(
+                            f"Processed item {i + 1} in batch process of size {current_batch_size}.", raw_output
+                        )
+                        outputs.append(output_item)
+                    batch_process = True
+                except NotImplementedError:
+                    LOGGER.info("No custom batch processing method found. Implement `handle_discrete_input_batch`.")
+                    batch_process = False
+                except InputOutputMismatchException:
+                    pass
+                except Exception as e:
+                    LOGGER.critical(f"The batch processing method implemented encountered a fatal error: {e}")
+                    log_stack_trace()
+                    batch_process = False
+
+            if not batch_process:
+                for i, input_item in enumerate(request.inputs):
+                    try:
+                        LOGGER.info(f"handle single input")
+                        raw_output: Dict[str, bytes] = self.model.handle_single_input(
+                            input_item.input, request.detect_drift, request.explain, 'str'
                         )
                         # TODO: It would probably be useful to have an example of explanation/drift metadata here
                         output_item = create_output_item(f"Processed item {i + 1} as single input.", raw_output)
