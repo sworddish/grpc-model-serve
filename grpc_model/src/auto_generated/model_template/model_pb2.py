@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1amodel_template/model.proto\"\x0f\n\rStatusRequest\"p\n\tModelInfo\x12\x12\n\nmodel_name\x18\x01 \x01(\t\x12\x15\n\rmodel_version\x18\x02 \x01(\t\x12\x14\n\x0cmodel_author\x18\x03 \x01(\t\x12\x12\n\nmodel_type\x18\x04 \x01(\t\x12\x0e\n\x06source\x18\x05 \x01(\t\"\\\n\x10ModelDescription\x12\x0f\n\x07summary\x18\x01 \x01(\t\x12\x0f\n\x07\x64\x65tails\x18\x02 \x01(\t\x12\x11\n\ttechnical\x18\x03 \x01(\t\x12\x13\n\x0bperformance\x18\x04 \x01(\t\"c\n\nModelInput\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\x12\x1c\n\x14\x61\x63\x63\x65pted_media_types\x18\x02 \x03(\t\x12\x10\n\x08max_size\x18\x03 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x04 \x01(\t\"Z\n\x0bModelOutput\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\x12\x12\n\nmedia_type\x18\x02 \x01(\t\x12\x10\n\x08max_size\x18\x03 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x04 \x01(\t\"J\n\x0eModelResources\x12\x14\n\x0crequired_ram\x18\x01 \x01(\t\x12\x10\n\x08num_cpus\x18\x02 \x01(\x02\x12\x10\n\x08num_gpus\x18\x03 \x01(\x05\"+\n\x0cModelTimeout\x12\x0e\n\x06status\x18\x01 \x01(\t\x12\x0b\n\x03run\x18\x02 \x01(\t\"\x9f\x01\n\rModelFeatures\x12\x1b\n\x13\x61\x64versarial_defense\x18\x01 \x01(\x08\x12\x12\n\nbatch_size\x18\x02 \x01(\x05\x12\x13\n\x0bretrainable\x18\x03 \x01(\x08\x12\x16\n\x0eresults_format\x18\x04 \x01(\t\x12\x14\n\x0c\x64rift_format\x18\x05 \x01(\t\x12\x1a\n\x12\x65xplanation_format\x18\x06 \x01(\t\"\xb0\x02\n\x0eStatusResponse\x12\x13\n\x0bstatus_code\x18\x01 \x01(\x05\x12\x0e\n\x06status\x18\x02 \x01(\t\x12\x0f\n\x07message\x18\x03 \x01(\t\x12\x1e\n\nmodel_info\x18\x04 \x01(\x0b\x32\n.ModelInfo\x12&\n\x0b\x64\x65scription\x18\x05 \x01(\x0b\x32\x11.ModelDescription\x12\x1b\n\x06inputs\x18\x06 \x03(\x0b\x32\x0b.ModelInput\x12\x1d\n\x07outputs\x18\x07 \x03(\x0b\x32\x0c.ModelOutput\x12\"\n\tresources\x18\x08 \x01(\x0b\x32\x0f.ModelResources\x12\x1e\n\x07timeout\x18\t \x01(\x0b\x32\r.ModelTimeout\x12 \n\x08\x66\x65\x61tures\x18\n \x01(\x0b\x32\x0e.ModelFeatures\"i\n\x0eInputBytesItem\x12)\n\x05input\x18\x01 \x03(\x0b\x32\x1a.InputBytesItem.InputEntry\x1a,\n\nInputEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x0c:\x02\x38\x01\"Y\n\x0fRunBytesRequest\x12\x1f\n\x06inputs\x18\x01 \x03(\x0b\x32\x0f.InputBytesItem\x12\x14\n\x0c\x64\x65tect_drift\x18\x02 \x01(\x08\x12\x0f\n\x07\x65xplain\x18\x03 \x01(\x08\"e\n\x0cInputStrItem\x12\'\n\x05input\x18\x01 \x03(\x0b\x32\x18.InputStrItem.InputEntry\x1a,\n\nInputEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"U\n\rRunStrRequest\x12\x1d\n\x06inputs\x18\x01 \x03(\x0b\x32\r.InputStrItem\x12\x14\n\x0c\x64\x65tect_drift\x18\x02 \x01(\x08\x12\x0f\n\x07\x65xplain\x18\x03 \x01(\x08\"u\n\nOutputItem\x12\'\n\x06output\x18\x01 \x03(\x0b\x32\x17.OutputItem.OutputEntry\x12\x0f\n\x07success\x18\x02 \x01(\x08\x1a-\n\x0bOutputEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x0c:\x02\x38\x01\"a\n\x0bRunResponse\x12\x13\n\x0bstatus_code\x18\x01 \x01(\x05\x12\x0e\n\x06status\x18\x02 \x01(\t\x12\x0f\n\x07message\x18\x03 \x01(\t\x12\x1c\n\x07outputs\x18\x04 \x03(\x0b\x32\x0b.OutputItem\"\x11\n\x0fShutdownRequest\"H\n\x10ShutdownResponse\x12\x13\n\x0bstatus_code\x18\x01 \x01(\x05\x12\x0e\n\x06status\x18\x02 \x01(\t\x12\x0f\n\x07message\x18\x03 \x01(\t2\xbc\x01\n\nModzyModel\x12)\n\x06Status\x12\x0e.StatusRequest\x1a\x0f.StatusResponse\x12*\n\x08RunBytes\x12\x10.RunBytesRequest\x1a\x0c.RunResponse\x12&\n\x06RunStr\x12\x0e.RunStrRequest\x1a\x0c.RunResponse\x12/\n\x08Shutdown\x12\x10.ShutdownRequest\x1a\x11.ShutdownResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1amodel_template/model.proto\"\x0f\n\rStatusRequest\"p\n\tModelInfo\x12\x12\n\nmodel_name\x18\x01 \x01(\t\x12\x15\n\rmodel_version\x18\x02 \x01(\t\x12\x14\n\x0cmodel_author\x18\x03 \x01(\t\x12\x12\n\nmodel_type\x18\x04 \x01(\t\x12\x0e\n\x06source\x18\x05 \x01(\t\"\\\n\x10ModelDescription\x12\x0f\n\x07summary\x18\x01 \x01(\t\x12\x0f\n\x07\x64\x65tails\x18\x02 \x01(\t\x12\x11\n\ttechnical\x18\x03 \x01(\t\x12\x13\n\x0bperformance\x18\x04 \x01(\t\"c\n\nModelInput\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\x12\x1c\n\x14\x61\x63\x63\x65pted_media_types\x18\x02 \x03(\t\x12\x10\n\x08max_size\x18\x03 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x04 \x01(\t\"Z\n\x0bModelOutput\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\x12\x12\n\nmedia_type\x18\x02 \x01(\t\x12\x10\n\x08max_size\x18\x03 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x04 \x01(\t\"J\n\x0eModelResources\x12\x14\n\x0crequired_ram\x18\x01 \x01(\t\x12\x10\n\x08num_cpus\x18\x02 \x01(\x02\x12\x10\n\x08num_gpus\x18\x03 \x01(\x05\"+\n\x0cModelTimeout\x12\x0e\n\x06status\x18\x01 \x01(\t\x12\x0b\n\x03run\x18\x02 \x01(\t\"\x9f\x01\n\rModelFeatures\x12\x1b\n\x13\x61\x64versarial_defense\x18\x01 \x01(\x08\x12\x12\n\nbatch_size\x18\x02 \x01(\x05\x12\x13\n\x0bretrainable\x18\x03 \x01(\x08\x12\x16\n\x0eresults_format\x18\x04 \x01(\t\x12\x14\n\x0c\x64rift_format\x18\x05 \x01(\t\x12\x1a\n\x12\x65xplanation_format\x18\x06 \x01(\t\"\xb0\x02\n\x0eStatusResponse\x12\x13\n\x0bstatus_code\x18\x01 \x01(\x05\x12\x0e\n\x06status\x18\x02 \x01(\t\x12\x0f\n\x07message\x18\x03 \x01(\t\x12\x1e\n\nmodel_info\x18\x04 \x01(\x0b\x32\n.ModelInfo\x12&\n\x0b\x64\x65scription\x18\x05 \x01(\x0b\x32\x11.ModelDescription\x12\x1b\n\x06inputs\x18\x06 \x03(\x0b\x32\x0b.ModelInput\x12\x1d\n\x07outputs\x18\x07 \x03(\x0b\x32\x0c.ModelOutput\x12\"\n\tresources\x18\x08 \x01(\x0b\x32\x0f.ModelResources\x12\x1e\n\x07timeout\x18\t \x01(\x0b\x32\r.ModelTimeout\x12 \n\x08\x66\x65\x61tures\x18\n \x01(\x0b\x32\x0e.ModelFeatures\"F\n\tInputItem\x12\x15\n\x0bimage_bytes\x18\x01 \x01(\x0cH\x00\x12\x19\n\x0fimage_base64str\x18\x02 \x01(\tH\x00\x42\x07\n\x05image\"O\n\nRunRequest\x12\x1a\n\x06inputs\x18\x01 \x03(\x0b\x32\n.InputItem\x12\x14\n\x0c\x64\x65tect_drift\x18\x02 \x01(\x08\x12\x0f\n\x07\x65xplain\x18\x03 \x01(\x08\"u\n\nOutputItem\x12\'\n\x06output\x18\x01 \x03(\x0b\x32\x17.OutputItem.OutputEntry\x12\x0f\n\x07success\x18\x02 \x01(\x08\x1a-\n\x0bOutputEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x0c:\x02\x38\x01\"a\n\x0bRunResponse\x12\x13\n\x0bstatus_code\x18\x01 \x01(\x05\x12\x0e\n\x06status\x18\x02 \x01(\t\x12\x0f\n\x07message\x18\x03 \x01(\t\x12\x1c\n\x07outputs\x18\x04 \x03(\x0b\x32\x0b.OutputItem\"\x11\n\x0fShutdownRequest\"H\n\x10ShutdownResponse\x12\x13\n\x0bstatus_code\x18\x01 \x01(\x05\x12\x0e\n\x06status\x18\x02 \x01(\t\x12\x0f\n\x07message\x18\x03 \x01(\t2\x8a\x01\n\nModzyModel\x12)\n\x06Status\x12\x0e.StatusRequest\x1a\x0f.StatusResponse\x12 \n\x03Run\x12\x0b.RunRequest\x1a\x0c.RunResponse\x12/\n\x08Shutdown\x12\x10.ShutdownRequest\x1a\x11.ShutdownResponseb\x06proto3')
 
 
 
@@ -27,12 +27,8 @@ _MODELRESOURCES = DESCRIPTOR.message_types_by_name['ModelResources']
 _MODELTIMEOUT = DESCRIPTOR.message_types_by_name['ModelTimeout']
 _MODELFEATURES = DESCRIPTOR.message_types_by_name['ModelFeatures']
 _STATUSRESPONSE = DESCRIPTOR.message_types_by_name['StatusResponse']
-_INPUTBYTESITEM = DESCRIPTOR.message_types_by_name['InputBytesItem']
-_INPUTBYTESITEM_INPUTENTRY = _INPUTBYTESITEM.nested_types_by_name['InputEntry']
-_RUNBYTESREQUEST = DESCRIPTOR.message_types_by_name['RunBytesRequest']
-_INPUTSTRITEM = DESCRIPTOR.message_types_by_name['InputStrItem']
-_INPUTSTRITEM_INPUTENTRY = _INPUTSTRITEM.nested_types_by_name['InputEntry']
-_RUNSTRREQUEST = DESCRIPTOR.message_types_by_name['RunStrRequest']
+_INPUTITEM = DESCRIPTOR.message_types_by_name['InputItem']
+_RUNREQUEST = DESCRIPTOR.message_types_by_name['RunRequest']
 _OUTPUTITEM = DESCRIPTOR.message_types_by_name['OutputItem']
 _OUTPUTITEM_OUTPUTENTRY = _OUTPUTITEM.nested_types_by_name['OutputEntry']
 _RUNRESPONSE = DESCRIPTOR.message_types_by_name['RunResponse']
@@ -101,49 +97,19 @@ StatusResponse = _reflection.GeneratedProtocolMessageType('StatusResponse', (_me
   })
 _sym_db.RegisterMessage(StatusResponse)
 
-InputBytesItem = _reflection.GeneratedProtocolMessageType('InputBytesItem', (_message.Message,), {
-
-  'InputEntry' : _reflection.GeneratedProtocolMessageType('InputEntry', (_message.Message,), {
-    'DESCRIPTOR' : _INPUTBYTESITEM_INPUTENTRY,
-    '__module__' : 'model_template.model_pb2'
-    # @@protoc_insertion_point(class_scope:InputBytesItem.InputEntry)
-    })
-  ,
-  'DESCRIPTOR' : _INPUTBYTESITEM,
+InputItem = _reflection.GeneratedProtocolMessageType('InputItem', (_message.Message,), {
+  'DESCRIPTOR' : _INPUTITEM,
   '__module__' : 'model_template.model_pb2'
-  # @@protoc_insertion_point(class_scope:InputBytesItem)
+  # @@protoc_insertion_point(class_scope:InputItem)
   })
-_sym_db.RegisterMessage(InputBytesItem)
-_sym_db.RegisterMessage(InputBytesItem.InputEntry)
+_sym_db.RegisterMessage(InputItem)
 
-RunBytesRequest = _reflection.GeneratedProtocolMessageType('RunBytesRequest', (_message.Message,), {
-  'DESCRIPTOR' : _RUNBYTESREQUEST,
+RunRequest = _reflection.GeneratedProtocolMessageType('RunRequest', (_message.Message,), {
+  'DESCRIPTOR' : _RUNREQUEST,
   '__module__' : 'model_template.model_pb2'
-  # @@protoc_insertion_point(class_scope:RunBytesRequest)
+  # @@protoc_insertion_point(class_scope:RunRequest)
   })
-_sym_db.RegisterMessage(RunBytesRequest)
-
-InputStrItem = _reflection.GeneratedProtocolMessageType('InputStrItem', (_message.Message,), {
-
-  'InputEntry' : _reflection.GeneratedProtocolMessageType('InputEntry', (_message.Message,), {
-    'DESCRIPTOR' : _INPUTSTRITEM_INPUTENTRY,
-    '__module__' : 'model_template.model_pb2'
-    # @@protoc_insertion_point(class_scope:InputStrItem.InputEntry)
-    })
-  ,
-  'DESCRIPTOR' : _INPUTSTRITEM,
-  '__module__' : 'model_template.model_pb2'
-  # @@protoc_insertion_point(class_scope:InputStrItem)
-  })
-_sym_db.RegisterMessage(InputStrItem)
-_sym_db.RegisterMessage(InputStrItem.InputEntry)
-
-RunStrRequest = _reflection.GeneratedProtocolMessageType('RunStrRequest', (_message.Message,), {
-  'DESCRIPTOR' : _RUNSTRREQUEST,
-  '__module__' : 'model_template.model_pb2'
-  # @@protoc_insertion_point(class_scope:RunStrRequest)
-  })
-_sym_db.RegisterMessage(RunStrRequest)
+_sym_db.RegisterMessage(RunRequest)
 
 OutputItem = _reflection.GeneratedProtocolMessageType('OutputItem', (_message.Message,), {
 
@@ -185,10 +151,6 @@ _MODZYMODEL = DESCRIPTOR.services_by_name['ModzyModel']
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _INPUTBYTESITEM_INPUTENTRY._options = None
-  _INPUTBYTESITEM_INPUTENTRY._serialized_options = b'8\001'
-  _INPUTSTRITEM_INPUTENTRY._options = None
-  _INPUTSTRITEM_INPUTENTRY._serialized_options = b'8\001'
   _OUTPUTITEM_OUTPUTENTRY._options = None
   _OUTPUTITEM_OUTPUTENTRY._serialized_options = b'8\001'
   _STATUSREQUEST._serialized_start=30
@@ -209,28 +171,20 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _MODELFEATURES._serialized_end=729
   _STATUSRESPONSE._serialized_start=732
   _STATUSRESPONSE._serialized_end=1036
-  _INPUTBYTESITEM._serialized_start=1038
-  _INPUTBYTESITEM._serialized_end=1143
-  _INPUTBYTESITEM_INPUTENTRY._serialized_start=1099
-  _INPUTBYTESITEM_INPUTENTRY._serialized_end=1143
-  _RUNBYTESREQUEST._serialized_start=1145
-  _RUNBYTESREQUEST._serialized_end=1234
-  _INPUTSTRITEM._serialized_start=1236
-  _INPUTSTRITEM._serialized_end=1337
-  _INPUTSTRITEM_INPUTENTRY._serialized_start=1293
-  _INPUTSTRITEM_INPUTENTRY._serialized_end=1337
-  _RUNSTRREQUEST._serialized_start=1339
-  _RUNSTRREQUEST._serialized_end=1424
-  _OUTPUTITEM._serialized_start=1426
-  _OUTPUTITEM._serialized_end=1543
-  _OUTPUTITEM_OUTPUTENTRY._serialized_start=1498
-  _OUTPUTITEM_OUTPUTENTRY._serialized_end=1543
-  _RUNRESPONSE._serialized_start=1545
-  _RUNRESPONSE._serialized_end=1642
-  _SHUTDOWNREQUEST._serialized_start=1644
-  _SHUTDOWNREQUEST._serialized_end=1661
-  _SHUTDOWNRESPONSE._serialized_start=1663
-  _SHUTDOWNRESPONSE._serialized_end=1735
-  _MODZYMODEL._serialized_start=1738
-  _MODZYMODEL._serialized_end=1926
+  _INPUTITEM._serialized_start=1038
+  _INPUTITEM._serialized_end=1108
+  _RUNREQUEST._serialized_start=1110
+  _RUNREQUEST._serialized_end=1189
+  _OUTPUTITEM._serialized_start=1191
+  _OUTPUTITEM._serialized_end=1308
+  _OUTPUTITEM_OUTPUTENTRY._serialized_start=1263
+  _OUTPUTITEM_OUTPUTENTRY._serialized_end=1308
+  _RUNRESPONSE._serialized_start=1310
+  _RUNRESPONSE._serialized_end=1407
+  _SHUTDOWNREQUEST._serialized_start=1409
+  _SHUTDOWNREQUEST._serialized_end=1426
+  _SHUTDOWNRESPONSE._serialized_start=1428
+  _SHUTDOWNRESPONSE._serialized_end=1500
+  _MODZYMODEL._serialized_start=1503
+  _MODZYMODEL._serialized_end=1641
 # @@protoc_insertion_point(module_scope)

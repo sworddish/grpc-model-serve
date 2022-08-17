@@ -7,8 +7,9 @@ import logging
 from typing import Dict
 
 import grpc
+import base64
 
-from grpc_model.src.auto_generated.model_template.model_pb2 import InputStrItem, InputBytesItem, RunStrRequest, RunBytesRequest, RunResponse, StatusRequest
+from grpc_model.src.auto_generated.model_template.model_pb2 import InputItem, RunRequest, RunResponse, StatusRequest
 from grpc_model.src.auto_generated.model_template.model_pb2_grpc import ModzyModelStub
 from grpc_model.src.model_server import get_server_port
 
@@ -21,10 +22,12 @@ LOGGER = logging.getLogger(__name__)
 
 
 def run(model_input):
-    def create_input_bytes(input_text: Dict[str, bytes]) -> InputBytesItem:
-        input_item = InputBytesItem()
-        for input_filename, input_contents in input_text.items():
-            input_item.input[input_filename] = input_contents
+    def create_input(input_dict) -> InputItem:
+        input_item = InputItem()
+        if "image_bytes" in input_dict:
+            input_item.image_bytes = input_dict["image_bytes"]
+        elif "image_base64str" in input_dict:
+            input_item.image_base64str = input_dict["image_base64str"]
         return input_item
 
     def unpack_and_report_outputs(run_response: RunResponse):
@@ -48,22 +51,30 @@ def run(model_input):
             return
 
         LOGGER.info(f"Sending single input.")
-        run_request = RunBytesRequest(inputs=[create_input_bytes(model_input)], detect_drift=False, explain=False)
-        single_response = grpc_client_stub.RunBytes(run_request)
+        run_request = RunRequest(inputs=[create_input(model_input)], detect_drift=False, explain=False)
+        single_response = grpc_client_stub.Run(run_request)
         unpack_and_report_outputs(single_response)
 
         LOGGER.info("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~")
 
         LOGGER.info(f"Sending batch of input.")
-        run_request_batch = RunBytesRequest(inputs=[create_input_bytes(model_input) for _ in range(BATCH_SIZE)], explain=False)
-        batch_response = grpc_client_stub.RunBytes(run_request_batch)
+        run_request_batch = RunRequest(inputs=[create_input(model_input) for _ in range(BATCH_SIZE)], explain=False)
+        batch_response = grpc_client_stub.Run(run_request_batch)
         unpack_and_report_outputs(batch_response)
 
 
 if __name__ == "__main__":
     # For each of the required input files that you have specified in your model.yaml file, add a key with the name of
     # the file to the dictionary below, where the value is the content of your test file as bytes
-    test_inputs = {"image": open(TEST_IMG_PATH, 'rb').read()}
+    LOGGER.info(f"run byte test....")
+
+    test_inputs = {"image_bytes": open(TEST_IMG_PATH, 'rb').read()}
+
+    run(test_inputs)
+
+    LOGGER.info(f"run base64 encoding test....")
+
+    test_inputs = {"image_base64str":  base64.b64encode(open(TEST_IMG_PATH, 'rb').read())}
 
     run(test_inputs)
 

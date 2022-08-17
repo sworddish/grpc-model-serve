@@ -22,14 +22,9 @@ class ModzyModelStub(object):
                 request_serializer=model__template_dot_model__pb2.StatusRequest.SerializeToString,
                 response_deserializer=model__template_dot_model__pb2.StatusResponse.FromString,
                 )
-        self.RunBytes = channel.unary_unary(
-                '/ModzyModel/RunBytes',
-                request_serializer=model__template_dot_model__pb2.RunBytesRequest.SerializeToString,
-                response_deserializer=model__template_dot_model__pb2.RunResponse.FromString,
-                )
-        self.RunStr = channel.unary_unary(
-                '/ModzyModel/RunStr',
-                request_serializer=model__template_dot_model__pb2.RunStrRequest.SerializeToString,
+        self.Run = channel.unary_unary(
+                '/ModzyModel/Run',
+                request_serializer=model__template_dot_model__pb2.RunRequest.SerializeToString,
                 response_deserializer=model__template_dot_model__pb2.RunResponse.FromString,
                 )
         self.Shutdown = channel.unary_unary(
@@ -51,13 +46,7 @@ class ModzyModelServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def RunBytes(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def RunStr(self, request, context):
+    def Run(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -77,14 +66,9 @@ def add_ModzyModelServicer_to_server(servicer, server):
                     request_deserializer=model__template_dot_model__pb2.StatusRequest.FromString,
                     response_serializer=model__template_dot_model__pb2.StatusResponse.SerializeToString,
             ),
-            'RunBytes': grpc.unary_unary_rpc_method_handler(
-                    servicer.RunBytes,
-                    request_deserializer=model__template_dot_model__pb2.RunBytesRequest.FromString,
-                    response_serializer=model__template_dot_model__pb2.RunResponse.SerializeToString,
-            ),
-            'RunStr': grpc.unary_unary_rpc_method_handler(
-                    servicer.RunStr,
-                    request_deserializer=model__template_dot_model__pb2.RunStrRequest.FromString,
+            'Run': grpc.unary_unary_rpc_method_handler(
+                    servicer.Run,
+                    request_deserializer=model__template_dot_model__pb2.RunRequest.FromString,
                     response_serializer=model__template_dot_model__pb2.RunResponse.SerializeToString,
             ),
             'Shutdown': grpc.unary_unary_rpc_method_handler(
@@ -123,7 +107,7 @@ class ModzyModel(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def RunBytes(request,
+    def Run(request,
             target,
             options=(),
             channel_credentials=None,
@@ -133,25 +117,8 @@ class ModzyModel(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/ModzyModel/RunBytes',
-            model__template_dot_model__pb2.RunBytesRequest.SerializeToString,
-            model__template_dot_model__pb2.RunResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def RunStr(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/ModzyModel/RunStr',
-            model__template_dot_model__pb2.RunStrRequest.SerializeToString,
+        return grpc.experimental.unary_unary(request, target, '/ModzyModel/Run',
+            model__template_dot_model__pb2.RunRequest.SerializeToString,
             model__template_dot_model__pb2.RunResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
