@@ -344,7 +344,8 @@ class GRPCBasicImageClassification:
         shapes = []
         for i, model_input in enumerate(model_inputs):
             # Try to get a image frame, but otherwise go for the data key
-            image = model_input['image']
+            #image = model_input['image']
+            image = model_input
             if type == 'str':
                 start_run_call = t()
                 image = base64.b64decode(image)
