@@ -15,7 +15,7 @@ from grpc_model.src.model_server import get_server_port
 
 HOST = "localhost"
 BATCH_SIZE = 8
-TEST_IMG_PATH = "./t.png"
+TEST_IMG_PATH = "./dog.jpg"
 
 logging.basicConfig(level=logging.INFO)
 LOGGER = logging.getLogger(__name__)

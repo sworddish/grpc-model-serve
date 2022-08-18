@@ -9,12 +9,13 @@ import torch
 import cv2
 import numpy as np
 from torchvision import models, transforms
+import imutils
 
 from skimage.segmentation import mark_boundaries
 from lime import lime_image
 from PIL import Image
 import base64
-
+from model_lib.src.utils import detect_blur_fft
 from time import time as t
 
 # define data directories
@@ -166,14 +167,14 @@ class GRPCBasicImageClassification:
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
         ]) 
     
-    def preprocess_img_bytes(self,img_bytes):
+    def preprocess_img_bytes(self,img_bytes,blur_detection = True):
         """
         Args: 
             input image in bytes format
         Returns: 
             NumPy array of preprocessed image and original shape of input image
         """
-
+        blurry = False
         try:
             data = cv2.imdecode(np.frombuffer(img_bytes, np.uint8), -1)
             orig_shape = data.shape
@@ -181,12 +182,26 @@ class GRPCBasicImageClassification:
             return get_failure_json_structure(
                 f"invalid image: the image file is corrupt or the format is not supported. Exception message: {e}"
             ),None
+        if blur_detection:
+            start_run_call = t()
+                
+            orig = imutils.resize(data, width=500)
+            gray = cv2.cvtColor(orig, cv2.COLOR_BGR2GRAY)
+            (mean, blurry) = detect_blur_fft(gray, size=60,
+	            thresh=10)
+            run_route_time = t() - start_run_call
+            LOGGER.info(
+                f"detect blur in {run_route_time}. "
+            )
+            text = "Blurry ({:.4f})" if blurry else "Not Blurry ({:.4f})".format(mean)
+            LOGGER.info(text)
 
         # resize and center crop input TODO: edit this
         data = cv2.cvtColor(data, cv2.COLOR_BGR2RGB)
+        
         data = cv2.resize(data, (224, 224)).reshape((1,224,224,3))
         
-        return data, orig_shape
+        return data, orig_shape, blurry
    
     def batch_predict(self,images):
         """
@@ -353,7 +368,7 @@ class GRPCBasicImageClassification:
                 LOGGER.info(
                     f"decode image base64 str in {run_route_time}. "
                 )
-            load_res, orig_shape = self.preprocess_img_bytes(image)
+            load_res, orig_shape, blurry = self.preprocess_img_bytes(image)
             if isinstance(load_res,dict):
                 indexed_errors[i] = load_res
             else:
